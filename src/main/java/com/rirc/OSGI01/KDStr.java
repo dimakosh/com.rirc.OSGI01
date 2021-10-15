@@ -17,7 +17,7 @@ public class KDStr {
 	public static boolean equalsIgnoreCase(String s1, String s2) {
 		return (s1==null)? s2==null : s1.equalsIgnoreCase(s2);
 	}
-	
+
 	public static boolean contains(String[] s1, String s2) {
 		for (String s : s1) {
 			if (s.equals(s2)) return true;
@@ -126,7 +126,18 @@ public class KDStr {
         String[] r = new String[list.size()];
     	return list.toArray(r);
     }
-    
+	
+	public static List<String[]> split_diapasons(String str) {
+		List<String[]> aElem= new ArrayList<String[]>();
+		for (String s : i_split(str, ' ')) {
+			if (!s.isEmpty()) {
+				String[] el= KDStr.a_split(s.toUpperCase(), '-');
+				aElem.add(el);
+			}
+		}
+		return aElem;
+	}
+
     @SuppressWarnings("deprecation")
 	public static boolean isSpace(char c) {
     	return Character.isSpace(c) || c=='\u00A0' || c=='\u2007' || c=='\u202F';
@@ -195,6 +206,9 @@ public class KDStr {
         s = s.replace('H', 'Н');
         s = s.replace('I', 'І');
         s = s.replace('Y', 'У');
+        s = s.replace('P', 'Р');
+        s = s.replace('C', 'С');
+        s = s.replace('T', 'Т');
 		
 		return s;
 	}

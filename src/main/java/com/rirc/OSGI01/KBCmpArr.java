@@ -21,8 +21,7 @@ public class KBCmpArr<T> implements Comparable<KBCmpArr<T>> {
 	public int hashCode() {
 		return Arrays.hashCode(bin);
 	}
-	
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj==null) return false;
