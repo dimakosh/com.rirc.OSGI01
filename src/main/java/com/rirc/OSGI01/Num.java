@@ -5,6 +5,11 @@ import java.math.RoundingMode;
 
 public class Num {
 
+	public static boolean in(int v, int ... l) {
+		for (int i= 0; i< l.length; i++) if (v==l[i]) return true;
+		return false;
+	}
+
 	public static boolean BoolVal(String s) {
     	if (s==null) return false;
 		
