@@ -8,7 +8,6 @@ import java.sql.Array;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.NClob;
 import java.sql.PreparedStatement;
 import java.sql.Ref;
@@ -26,40 +25,47 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class KDDataSet implements KDResultSetable {
 	
 	private Map<String,Integer> fldInd= new HashMap<String,Integer>();
 	private int curInd;
-	private Integer getInd(String fld) {
-		return fldInd.computeIfAbsent(fld, (k)-> curInd++);
+	private Integer compInd(String fld) {
+		return fldInd.computeIfAbsent(fld.toUpperCase(), (k)-> curInd++);
 	}
 	
 	public class Row {
 		private Map<Integer,Object> r= new HashMap<Integer,Object>();
 		
 		public Row add(String fld, String val) {
-			r.put(getInd(fld), val);
+			r.put(compInd(fld), val);
 			return this;
 		}
 		public Row add(String fld, int val) {
-			r.put(getInd(fld), Double.valueOf(val));
+			r.put(compInd(fld), Double.valueOf(val));
 			return this;
 		}
 		public Row add(String fld, Integer val) {
-			r.put(getInd(fld), (val==null)? null:Double.valueOf(val));
+			r.put(compInd(fld), (val==null)? null:Double.valueOf(val));
 			return this;
 		}
 		public Row add(String fld, double val) {
-			r.put(getInd(fld), Double.valueOf(val));
+			r.put(compInd(fld), Double.valueOf(val));
 			return this;
 		}
 		public Row add(String fld, Double val) {
-			r.put(getInd(fld), val);
+			r.put(compInd(fld), val);
 			return this;
 		}
-		public Row add(String fld, Date val) {
-			r.put(getInd(fld), val);
+		public Row add(String fld, java.util.Date val) {
+			r.put(compInd(fld), KDTime.sqlDate(val));
+			return this;
+		}
+
+		public Row addObject(String fld, Object val) {
+			if (val!=null && val instanceof Number && !(val instanceof Double)) val= ((Number)val).doubleValue();
+			r.put(compInd(fld), val);
 			return this;
 		}
 		
@@ -70,8 +76,13 @@ public class KDDataSet implements KDResultSetable {
 			Object val= r.get(ind);
 			return (Double)val;
 		}
-		public Date getDate(int ind) {
-			return (Date)r.get(ind);
+		public java.sql.Date getDate(int ind) {
+			return (java.sql.Date)r.get(ind);
+		}
+		
+		public int getInd(String fld) {
+			Integer ind= fldInd.get(fld.toUpperCase());
+			return (ind==null)? -1:ind;
 		}
 	}
 	
@@ -81,6 +92,21 @@ public class KDDataSet implements KDResultSetable {
 		Row r= new Row();
 		rows.add(r);
 		return r;
+	}
+
+	public Row add(Iterable<Entry<String, Object>> fd) {
+		Row r= new Row();
+		for (Entry<String, Object> d : fd) r.addObject(d.getKey(), d.getValue());
+		rows.add(r);
+		return r;
+	}
+	
+	public int size() {
+		return rows.size();
+	}
+	
+	public Iterable<Row> getIterable() {
+		return ()->rows.iterator(); 
 	}
 
 	@Override
@@ -191,9 +217,9 @@ public class KDDataSet implements KDResultSetable {
 			}
 
 			@Override
-			public Date getDate(int columnIndex) throws SQLException {
+			public java.sql.Date getDate(int columnIndex) throws SQLException {
 				Row r= rows.get(ind);
-				Date val= r.getDate(columnIndex);
+				java.sql.Date val= r.getDate(columnIndex);
 				isNull= val==null;
 				return val;
 			}
@@ -289,7 +315,7 @@ public class KDDataSet implements KDResultSetable {
 			}
 
 			@Override
-			public Date getDate(String columnLabel) throws SQLException {
+			public java.sql.Date getDate(String columnLabel) throws SQLException {
 				// TODO Auto-generated method stub
 				return null;
 			}
@@ -362,7 +388,7 @@ public class KDDataSet implements KDResultSetable {
 
 			@Override
 			public int findColumn(String columnLabel) throws SQLException {
-				Integer ind= fldInd.get(columnLabel);
+				Integer ind= fldInd.get(columnLabel.toUpperCase());
 				if (ind==null) throw new SQLException("Column error:"+columnLabel);
 				return ind;
 			}
@@ -584,7 +610,7 @@ public class KDDataSet implements KDResultSetable {
 			}
 
 			@Override
-			public void updateDate(int columnIndex, Date x) throws SQLException {
+			public void updateDate(int columnIndex, java.sql.Date x) throws SQLException {
 				// TODO Auto-generated method stub
 				
 			}
@@ -698,7 +724,7 @@ public class KDDataSet implements KDResultSetable {
 			}
 
 			@Override
-			public void updateDate(String columnLabel, Date x) throws SQLException {
+			public void updateDate(String columnLabel, java.sql.Date x) throws SQLException {
 				// TODO Auto-generated method stub
 				
 			}
@@ -854,13 +880,13 @@ public class KDDataSet implements KDResultSetable {
 			}
 
 			@Override
-			public Date getDate(int columnIndex, Calendar cal) throws SQLException {
+			public java.sql.Date getDate(int columnIndex, Calendar cal) throws SQLException {
 				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
-			public Date getDate(String columnLabel, Calendar cal) throws SQLException {
+			public java.sql.Date getDate(String columnLabel, Calendar cal) throws SQLException {
 				// TODO Auto-generated method stub
 				return null;
 			}

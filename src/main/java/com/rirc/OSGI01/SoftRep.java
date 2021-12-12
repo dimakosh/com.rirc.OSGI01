@@ -29,8 +29,14 @@ public class SoftRep {
         dataCmd = _dataCmd;
         repFileName = _repFileName;
     }
+    public SoftRep(String repName, String repSmallHead, String repFileName, KDResultSetable dataCmd) {
+    	this(null, repName, repSmallHead, repFileName, dataCmd);
+    }    
     public SoftRep(ConnPrms _connPrms, String _repName, String _repSmallHead, KDResultSetable _dataCmd) {
     	this(_connPrms, _repName, _repSmallHead, _repName, _dataCmd);
+    }
+    public SoftRep(String _repName, String _repSmallHead, KDResultSetable _dataCmd) {
+    	this(null, _repName, _repSmallHead, _repName, _dataCmd);
     }
     public SoftRep(ConnPrms _connPrms, String _repName, KDResultSetable _dataCmd) {
     	this(_connPrms, _repName, null, _repName, _dataCmd);

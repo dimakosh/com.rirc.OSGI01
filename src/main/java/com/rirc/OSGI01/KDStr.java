@@ -9,6 +9,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class KDStr {
+
+	public static boolean in(String v, String ... l) {
+		for (int i= 0; i< l.length; i++) if (v.equals(l[i])) return true;
+		return false;
+	}
 	
 	public static boolean equals(String s1, String s2) {
 		return (s1==null)? s2==null : s1.equals(s2);
@@ -29,15 +34,17 @@ public class KDStr {
 		String s= thr.getMessage();
 		if (s==null) s= thr.getClass().getName();
 		if (s==null) s= "...";
+		
+		Throwable[] asup= thr.getSuppressed();
+		if (asup!=null) {
+			for (Throwable sup : asup) s+= getExMessage(sup);
+		}
+		
 		return s;
 	}
 	public static String getExMessage(Throwable thr, int maxLen) {
-		String s= thr.getMessage();
-		if (s==null) s= thr.getClass().getName();
-		if (s==null) s= "...";
-		else {
-			if (s.length()>maxLen) s= s.substring(0, maxLen);
-		}
+		String s= getExMessage(thr);
+		if (s.length()>maxLen) s= s.substring(0, maxLen);
 		return s;
 	}
 	public static String getExAllInfo(Throwable thr) {
