@@ -64,7 +64,8 @@ public class KDDataSet implements KDResultSetable {
 		}
 
 		public Row addObject(String fld, Object val) {
-			if (val!=null && val instanceof Number && !(val instanceof Double)) val= ((Number)val).doubleValue();
+			if (val!=null && !(val instanceof Double) && (val instanceof Number n)) val= n.doubleValue();
+			//if (val!=null && val instanceof Number && !(val instanceof Double)) val= ((Number)val).doubleValue();
 			r.put(compInd(fld), val);
 			return this;
 		}

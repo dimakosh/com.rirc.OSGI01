@@ -36,9 +36,7 @@ public class DataViewStructure {
 			
 			int n= 0;
 			for (Object val : values) {
-				if (val!=null && val instanceof LSEnumValue) {
-					LSEnumValue lsEnum= (LSEnumValue)val;
-
+				if (val!=null && val instanceof LSEnumValue lsEnum) {
 					pstmt.setInt(++n, lsEnum.Grp);
 					pstmt.setString(++n, lsEnum.NumBeg);
 					pstmt.setString(++n, lsEnum.NumEnd);
@@ -49,8 +47,8 @@ public class DataViewStructure {
 					continue;
 				}
 
-				if (val!=null && val instanceof java.util.Date) {
-					pstmt.setDate(++n, KDTime.sqlDate((java.util.Date)val));
+				if (val!=null && val instanceof java.util.Date dt) {
+					pstmt.setDate(++n, KDTime.sqlDate(dt));
 				} else {
 					pstmt.setObject(++n, val);
 				}

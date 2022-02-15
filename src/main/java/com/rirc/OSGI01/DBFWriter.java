@@ -118,6 +118,7 @@ public class DBFWriter {
 					Double val= row.getDouble(ind);
 					if (val!=null) {
 						String s= String.format(f.getDecFormat(), val);
+						s= s.replace(',', '.');
 						byte[] b= s.getBytes(fldChset);
 						if (f.getLength()<b.length) throw new RuntimeException("Переполнение в поле: "+f.getName()+": "+s);
 						System.arraycopy(b, 0, buf, f.getOff(), b.length);

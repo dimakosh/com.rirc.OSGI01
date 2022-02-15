@@ -10,6 +10,8 @@ public class ConnPrms implements Serializable {
 	private String user;
 	private String pass;
 
+	private boolean isAdmin;
+	
     protected ConnPrms() {
     }
     
@@ -23,6 +25,8 @@ public class ConnPrms implements Serializable {
 	    source = _source;
 	    user = (_user==null)? null :_user.trim().toUpperCase();
 	    pass = _pass;
+	    
+	    isAdmin= "SYSDBA".equalsIgnoreCase(user);
     }
 
     public String getServer() {
@@ -40,9 +44,15 @@ public class ConnPrms implements Serializable {
     public String getServer_source() {
     	return "server_"+source;
     }
+    
+    public boolean isAdmin() {
+    	return isAdmin;
+    }
 
     public void setUser(String _user) {
     	user= _user;
+
+    	isAdmin= "SYSDBA".equalsIgnoreCase(user);
     }
     public void setPass(String _pass) {
     	pass= _pass;
