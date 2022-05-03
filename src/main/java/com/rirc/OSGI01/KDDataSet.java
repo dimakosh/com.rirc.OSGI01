@@ -85,6 +85,11 @@ public class KDDataSet implements KDResultSetable {
 			Integer ind= fldInd.get(fld.toUpperCase());
 			return (ind==null)? -1:ind;
 		}
+
+		@Override
+		public String toString() {
+			return "Row [r=" + r + "]";
+		}
 	}
 	
 	private List<Row> rows= new ArrayList<Row>();

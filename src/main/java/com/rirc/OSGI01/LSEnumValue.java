@@ -22,6 +22,6 @@ public class LSEnumValue implements Serializable {
 	
 	@Override
 	public String toString() {
-		return Grp+','+NumBeg+','+NumEnd+','+HsOrStrByLSBeg+','+HsByLSEnd+','+PlatOnly+','+NPAdr;
+		return String.valueOf(Grp)+','+NumBeg+','+NumEnd+','+HsOrStrByLSBeg+','+HsByLSEnd+','+PlatOnly+','+NPAdr;
 	}
 }

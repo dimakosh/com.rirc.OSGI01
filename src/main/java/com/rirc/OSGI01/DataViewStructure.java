@@ -68,6 +68,14 @@ public class DataViewStructure {
 			return dataCmd.getResultSet(conn);
 		}
 
+		static public int getInt(Connection conn, String sql, Object... values) throws SQLException {
+			KDCommand dataCmd= new KDCommand(sql, values);
+			try (ResultSet rs= dataCmd.getResultSet(conn)) {
+				if (rs.next()) return rs.getInt(1);
+				else return 0;
+			}
+		}
+
 		static public String getString(Connection conn, String sql, Object... values) throws SQLException {
 			KDCommand dataCmd= new KDCommand(sql, values);
 			try (ResultSet rs= dataCmd.getResultSet(conn)) {
@@ -88,6 +96,14 @@ public class DataViewStructure {
 				return pstmt.executeUpdate();
 			}
 		}
+		
+		static public int getInt(ConnPrms connPrms, String sql, Object... values) {
+			try (Connection conn= KDConnection.get(connPrms)) {
+				return getInt(conn, sql, values);
+			} catch (SQLException ex) {
+				throw new IllegalStateException(ex);
+			}
+		}		
 		
 		static public String getString(ConnPrms connPrms, String sql, Object... values) {
 			try (Connection conn= KDConnection.get(connPrms)) {
